@@ -36,6 +36,7 @@ class Bank:
         self.customers = {}
         self.admins = {}
         self.transaction = {}
+        self.history = []
         self._bank_balance = 500000
         self._bank_loan_given = 0
     
@@ -71,6 +72,7 @@ class Bank:
         self._bank_balance += amount
         time = datetime.datetime.now()
         self.transaction[ac] = ( (f'deposited at', time, f'USER name {customer.name}', f' balance :{customer.balance}') )
+        self.history.append((ac, f'deposited at', time, f'USER name {customer.name}', f' balance :{customer.balance}') )
 
     def withdraw(self, ac, amount):
         if self._bank_balance < amount:
@@ -84,11 +86,17 @@ class Bank:
                 print(f'Congratulations your balance is now {customer.balance}')
                 self._bank_balance -= amount
                 time = datetime.datetime.now()
-                self.transaction[ac] = ( (f'deposited at', time, f'USER name {customer.name}', f' balance :{customer.balance}') )
+                self.transaction[ac] = ( (f'withdrawn at', time, f'USER name {customer.name}', f' balance :{customer.balance}') )
+                self.history.append(( ac, f'withdrawn at', time, f'USER name {customer.name}', f' balance :{customer.balance}') )
 
     def transaction_history(self, ac):
         for h in self.transaction[ac]:
             print(h)
+
+    def show_transaction_history(self, ac):
+        for t in self.history:
+            if t[0] == ac:
+                print(t)
 
     def take_loan(self,ac, amount):
         if self._bank_balance < amount:
@@ -99,6 +107,7 @@ class Bank:
                 customer.loan -= 1
                 self._bank_balance -= amount
                 customer.balance += amount
+                self.history.append((ac, f'took lone at', time, f'USER name {customer.name}', f' balance :{customer.balance}') )
                 print(f'congratulation you got the loan your balance is {customer.balance}')
             else :
                 print('you cant have the loan you already took 2x time')
@@ -211,7 +220,10 @@ def user_login():
     print('please enter your account number:')
     while True:
         try:
-            ac_number= int(input())
+            ac = input()
+            if ac == 'exit':
+                break
+            ac_number= int(ac)
             if the_bank.check_ac(ac_number):
                 break
         except:
@@ -231,7 +243,10 @@ def admin_login():
     print('please enter your admin account number:')
     while True:
         try:
-            ac_number= int(input())
+            ac = input()
+            if ac == 'exit':
+                break
+            ac_number= int(ac)
             if the_bank.check_admin_ac(ac_number):
                 break
         except:
@@ -331,7 +346,8 @@ while True:
                         print('your balance: ',bln)
                     #transaction history
                     elif a == '4':
-                        the_bank.transaction_history(ac_number)
+                        the_bank.show_transaction_history(ac_number)
+                        
                     #take loan
                     elif a == '5':
                         if Bank.allow_lone == False:
