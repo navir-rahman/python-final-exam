@@ -1,0 +1,31 @@
+
+
+#bank needs to check all user email, account_number,
+#user needs history, balance, loan times
+
+# admin needs access to all user, bank balance/loan, turn of loan , delete user
+
+
+
+while true:
+    1=> user
+        1=> make account
+            => put data ( name, email, password, account_type)
+                =|| output account number
+
+        2=> login account
+            1=> deposit amount
+            2=> check available balance
+            3=> check transaction 
+            4=> take loan ( max 2 time)
+            5=> transfer balance to another account 
+
+
+    2=>admin
+        1=> create account(admin / user)
+            =>call same account maker function
+        2=> delete user account
+        3=> see all user
+        4=> total bank balance
+        5=> total loan amount
+        6=> turn of loan
